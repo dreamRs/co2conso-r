@@ -1,0 +1,170 @@
+/*-- scss:defaults --*/
+$primary: #3E6B4F !default;
+
+/*-- scss:rules --*/
+
+/* =========================
+   COLORS / ALERTS
+========================= */
+.bg-vb-success {
+  color: var(--bs-success);
+  background-color: rgba(var(--bs-success-rgb), 0.1);
+  border-color: rgba(var(--bs-success-rgb), 0.3);
+}
+.bg-vb-info {
+  color: var(--bs-info);
+  background-color: rgba(var(--bs-info-rgb), 0.1);
+  border-color: rgba(var(--bs-info-rgb), 0.3);
+}
+.bg-vb-warning {
+  color: var(--bs-warning);
+  background-color: rgba(var(--bs-warning-rgb), 0.1);
+  border-color: rgba(var(--bs-warning-rgb), 0.3);
+}
+.bg-vb-danger {
+  color: var(--bs-danger);
+  background-color: rgba(var(--bs-danger-rgb), 0.1);
+  border-color: rgba(var(--bs-danger-rgb), 0.3);
+}
+
+/* =========================
+   CARD BASE FIX
+========================= */
+.card {
+  --bs-card-cap-bg: rgba(var(--bs-body-color-rgb), 0.03);
+  --bs-card-bg: var(--bs-body-bg);
+}
+
+/* IMPORTANT: évite les scrolls internes Quarto */
+.card,
+.card-body,
+.tab-pane {
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* =========================
+   QUARTO DASHBOARD GLOBAL FIX
+========================= */
+.quarto-dashboard .html-fill-container,
+.quarto-dashboard .html-fill-item {
+  overflow: hidden !important;
+  min-height: 0 !important;
+}
+
+/* =========================
+   NAVBAR
+========================= */
+.quarto-dashboard .navbar {
+  background-color: $primary !important;
+}
+.quarto-dashboard .navbar-nav {
+  margin-left: auto !important;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* =========================
+   TABS
+========================= */
+.quarto-dashboard .nav-tabs .nav-link,
+.quarto-dashboard .nav-pills .nav-link {
+  border-radius: 10px;
+  padding: 6px 14px;
+  margin-left: 6px;
+}
+.quarto-dashboard .nav-tabs .nav-link.active,
+.quarto-dashboard .nav-pills .nav-link.active {
+  background-color: $primary;
+  color: white !important;
+  border-color: $primary;
+}
+
+/* tabset card header layout */
+.bslib-navs-card-title {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+}
+.bslib-navs-card-title::before {
+  content: "Intensité horaire des GES de la consommation";
+  font-weight: 700;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  flex: 1 1 auto;
+  margin-right: 1rem;
+}
+.bslib-navs-card-title .nav-tabs,
+.bslib-navs-card-title .card-header-tabs {
+  flex-shrink: 0 !important;
+  width: auto !important;
+  margin-left: 0 !important;
+}
+.bslib-navs-card-title .nav-link.active {
+  background-color: #1B5E20 !important;
+  border-color: #1B5E20 !important;
+  color: white !important;
+}
+
+/* =========================
+   VALUE BOXES
+========================= */
+.bslib-value-box .value-box-area {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.bslib-value-box .value-box-title {
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.07em !important;
+  opacity: 0.9 !important;
+  margin-bottom: 0.2rem !important;
+  line-height: 1.3 !important;
+}
+
+.bslib-value-box .value-box-value {
+  font-size: 2.2rem !important;
+  font-weight: 800 !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.01em !important;
+}
+
+/* =========================
+   CHART FIX
+========================= */
+.apexcharter,
+.apexcharts-canvas,
+.apexcharts-svg,
+.html-widget {
+  overflow: hidden !important;
+  max-height: 100% !important;
+}
+
+/* =========================
+   CARD CONTENT SCROLL FIX FINAL
+========================= */
+.card-body,
+.tab-pane,
+.html-fill-container,
+.html-fill-item {
+  overflow: hidden !important;
+  min-height: 0 !important;
+}
+
+/* =========================
+   REMOVE INTERNAL SCROLLBARS
+========================= */
+.quarto-dashboard .card .card-body {
+  overflow: hidden !important;
+}
+
+/* =========================
+   CARD TITLE
+========================= */
+.quarto-dashboard .card .card-header:not(.bslib-navs-card-title) .card-title {
+  font-weight: 700 !important;
+}

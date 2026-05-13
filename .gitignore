@@ -1,0 +1,13 @@
+# R
+.Rhistory
+.RData
+.Rproj.user/
+
+# Mac
+.DS_Store
+
+# Quarto (fichiers générés)
+/_site/
+/.quarto/
+*_files/
+*_cache/

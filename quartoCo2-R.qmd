@@ -1,0 +1,126 @@
+---
+title: "Intensité en émissions de GES de l'électricité consommée en France en temps réel"
+format:
+  dashboard:
+    theme:
+      - cosmo
+      - assets/styles/custom.scss
+execute:
+  echo: false
+---
+
+```{r setup, include = FALSE}
+library(apexcharter)
+library(dplyr)
+library(jsonlite)
+library(lubridate)
+library(httr2)
+library(magrittr)
+library(rlang)
+library(data.table)
+library(arrow)
+
+
+source("R/graphiques.R")
+source("scripts/recuperation_donnees.R")
+
+donnees <- charger_donnees()
+
+# on convertit en CET 
+donnees <- donnees %>%
+  mutate(date_heure_cet = lubridate::with_tz(date_heure_utc, "Europe/Paris"))
+
+
+now_cet <- max(donnees$date_heure_cet, na.rm = TRUE)
+
+co2_now   <- donnees[date_heure_cet == now_cet, intensite_emissions_conso]
+co2_24h   <- round(mean(donnees[date_heure_cet >= now_cet - hours(24), intensite_emissions_conso]), 1)
+co2_min30 <- min(donnees[date_heure_cet  >= now_cet - days(30),  intensite_emissions_conso])
+co2_max30 <- max(donnees[date_heure_cet  >= now_cet - days(30),  intensite_emissions_conso])
+
+enr_now   <- donnees[date_heure_cet == now_cet, part_enr_conso]
+
+mois_titre <- mois_actuel(donnees)
+```
+
+# Intensité CO₂
+## Row {height="25%"}
+
+::: {.valuebox icon="lightning-charge-fill" color="#4FAF8F"}
+CO₂ temps réel (gCO2/kWh)
+
+`r co2_now`
+:::
+
+::: {.valuebox icon="clock-history" color="#57B394"}
+Moyenne 24h (gCO2/kWh)
+
+`r co2_24h `
+:::
+
+::: {.valuebox icon="bar-chart-fill" color="#63BA9A"}
+Min — Max 30j (gCO2/kWh)
+
+`r paste0(co2_min30, "-", co2_max30)`
+:::
+
+::: {.valuebox icon="wind" color="#6E9FCF"}
+Part ENR temps réel
+
+`r paste0(enr_now, "%")`
+:::
+
+## Row
+
+### Column {width="65%"} {.tabset}
+
+```{r periode-24h}
+#| title: "24h"
+graphique_periodes(donnees, "24h")
+```
+
+```{r periode-30j}
+#| title: "30 jours"
+graphique_periodes(donnees, "30j")
+```
+
+```{r periode-1an}
+#| title: "1 an"
+graphique_periodes(donnees, "1an")
+```
+
+### Column {width="35%"}
+
+```{r boxplot}
+#| title: !expr paste("Statistiques de l'intensité en CO₂ pour le mois de :", mois_titre)
+box_mois(donnees)
+```
+
+
+# À propos
+
+## Row
+
+::: card
+::: card-header
+**Repo Github**
+:::
+::: card-body
+Le code source du dashboard est disponible ici :
+
+[🔗 Voir le repo](https://github.com/dreamRs/co2conso-r)
+:::
+:::
+
+::: card
+::: card-header
+**Données**
+:::
+::: card-body
+Données issues du dataset **"Part des EnR et intensité en émissions de GES de l’électricité consommée en France en temps réel"** 
+de l'API **ODRE** (Open Data Réseaux Énergies), 
+actualisées toutes les **heures** par RTE :
+
+[🔗 Accéder au dataset](https://odre.opendatasoft.com/explore/dataset/part-enr-intensite-ges-conso-tr)
+:::
+:::
