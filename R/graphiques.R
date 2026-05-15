@@ -32,17 +32,22 @@ box_mois <- function(donnees) {
     )
 }
 
-graphique_periodes <- function(donnees, periode = "24h") {
+graphique_periodes <- function(donnees, periode = c("24h", "7j", "30j", "1an")) {
+  
+  periode <- match.arg(periode)
+  
   now_cet <- max(donnees$date_heure_utc, na.rm = TRUE) %>%
     lubridate::with_tz("Europe/Paris")
   
   data_plot <- donnees %>%
     mutate(datetime_cet = lubridate::with_tz(date_heure_utc, "Europe/Paris")) %>%
     filter(
-      datetime_cet >= now_cet - switch(periode,
-                                       "24h" = lubridate::hours(24),
-                                       "30j" = lubridate::days(30),
-                                       "1an" = lubridate::days(365)
+      datetime_cet >= now_cet - switch(
+        periode,
+        "24h" = lubridate::hours(24),
+        "7j" = lubridate::days(7),
+        "30j" = lubridate::days(30),
+        "1an" = lubridate::year(1)
       )
     )
   
@@ -69,7 +74,7 @@ graphique_periodes <- function(donnees, periode = "24h") {
     ax_yaxis(
       title = list(text = "gCO₂éq/kWh"), 
       decimalsInFloat = 2, 
-      min = y_min
+      min = 0
     ) %>%
     ax_tooltip(
       x = list(format = "dd/MM/yyyy à HH:mm"),

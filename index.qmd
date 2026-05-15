@@ -75,9 +75,9 @@ Part ENR temps réel
 
 ### Column {width="65%"} {.tabset}
 
-```{r periode-24h}
-#| title: "24h"
-graphique_periodes(donnees, "24h")
+```{r periode-7j}
+#| title: "7 jours"
+graphique_periodes(donnees, "7j")
 ```
 
 ```{r periode-30j}
