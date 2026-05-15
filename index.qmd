@@ -47,25 +47,25 @@ mois_titre <- mois_actuel(donnees)
 # Intensité CO₂
 ## Row {height="15%"}
 
-::: {.valuebox icon="lightning-charge-fill" color="#3E6B4F4D"}
+::: {.valuebox icon="lightning-charge-fill" color="vb-primary"}
 CO₂ temps réel (gCO₂éq/kWh)
 
 `r co2_now`
 :::
 
-::: {.valuebox icon="clock-history" color="#3E6B4F4D"}
+::: {.valuebox icon="clock-history" color="vb-primary"}
 Moyenne 24h (gCO₂éq/kWh)
 
 `r co2_24h `
 :::
 
-::: {.valuebox icon="bar-chart-fill" color="#3E6B4F4D"}
+::: {.valuebox icon="bar-chart-fill" color="vb-primary"}
 Min — Max 30j (gCO₂éq/kWh)
 
 `r paste0(co2_min30, "-", co2_max30)`
 :::
 
-::: {.valuebox icon="wind" color="#6E9FCF4D"}
+::: {.valuebox icon="wind" color="vb-info"}
 Part ENR temps réel
 
 `r paste0(enr_now, "%")`

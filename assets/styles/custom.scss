@@ -1,5 +1,6 @@
 /*-- scss:defaults --*/
 $primary: #3E6B4F !default;
+$info: #6E9FCF !default;
 
 /*-- scss:rules --*/
 
@@ -133,10 +134,51 @@ $primary: #3E6B4F !default;
   letter-spacing: -0.01em !important;
 }
 
-.valuebox {
-  border: 1px solid transparent;
+
+
+
+.bg-vb-success {
+  color: var(--bs-success);
+  background-color: rgba(var(--bs-success-rgb), 0.1);
+  border-color: rgba(var(--bs-success-rgb), 0.3);
   border-radius: 15px;
 }
+
+.bg-vb-info {
+  color: var(--bs-info);
+  background-color: rgba(var(--bs-info-rgb), 0.1);
+  border-color: rgba(var(--bs-info-rgb), 0.3);
+  border-radius: 15px;
+}
+
+.bg-vb-warning {
+  color: var(--bs-warning);
+  background-color: rgba(var(--bs-warning-rgb), 0.1);
+  border-color: rgba(var(--bs-warning-rgb), 0.3);
+  border-radius: 15px;
+}
+
+.bg-vb-danger {
+  color: var(--bs-danger);
+  background-color: rgba(var(--bs-danger-rgb), 0.1);
+  border-color: rgba(var(--bs-danger-rgb), 0.3);
+  border-radius: 15px;
+}
+
+.bg-vb-primary {
+  color: var(--bs-primary);
+  background-color: rgba(var(--bs-primary-rgb), 0.1);
+  border-color: rgba(var(--bs-primary-rgb), 0.3);
+  border-radius: 15px;
+}
+
+.bg-vb-secondary {
+  color: var(--bs-secondary);
+  background-color: rgba(var(--bs-secondary-rgb), 0.1);
+  border-color: rgba(var(--bs-secondary-rgb), 0.3);
+  border-radius: 15px;
+}
+
 
 /* =========================
    CHART FIX
