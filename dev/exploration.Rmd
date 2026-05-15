@@ -1,0 +1,35 @@
+---
+title: "Exploration - Intensité carbone français"
+output: html_document
+date: "2026-05-15"
+---
+
+```{r, include=FALSE,  results='hide'}
+Sys.setlocale("LC_TIME", "fr_FR.UTF-8")
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+setwd("..")
+
+library(ggplot2)
+library(dplyr)
+library(lubridate)
+library(magrittr)
+library(rlang)
+library(data.table)
+library(arrow)
+library(httr2)
+library(apexcharter)
+
+source("R/graphiques.R")
+source("R/data.R")
+donnees <- charger_donnees()
+donnees <- donnees %>%
+  mutate(date_heure_cet = lubridate::with_tz(date_heure_utc, "Europe/Paris"))
+
+heatmap_annee(donnees)
+heatmap_jour(donnees)
+histogramme(donnees)
+histo_derniere(donnees)
+evolution_annuelle(donnees)
+```
