@@ -47,7 +47,7 @@ graphique_periodes <- function(donnees, periode = c("24h", "7j", "30j", "1an")) 
         "24h" = lubridate::hours(24),
         "7j" = lubridate::days(7),
         "30j" = lubridate::days(30),
-        "1an" = lubridate::year(1)
+        "1an" = lubridate::years(1)
       )
     )
   
