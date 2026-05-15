@@ -45,7 +45,7 @@ mois_titre <- mois_actuel(donnees)
 ```
 
 # Intensité CO₂
-## Row {height="15%"}
+## Row {height="17.5%"}
 
 ::: {.valuebox icon="lightning-charge-fill" color="vb-primary"}
 CO₂ temps réel (gCO₂éq/kWh)

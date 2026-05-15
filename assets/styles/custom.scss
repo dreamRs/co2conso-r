@@ -4,29 +4,6 @@ $info: #6E9FCF !default;
 
 /*-- scss:rules --*/
 
-/* =========================
-   COLORS / ALERTS
-========================= */
-.bg-vb-success {
-  color: var(--bs-success);
-  background-color: rgba(var(--bs-success-rgb), 0.1);
-  border-color: rgba(var(--bs-success-rgb), 0.3);
-}
-.bg-vb-info {
-  color: var(--bs-info);
-  background-color: rgba(var(--bs-info-rgb), 0.1);
-  border-color: rgba(var(--bs-info-rgb), 0.3);
-}
-.bg-vb-warning {
-  color: var(--bs-warning);
-  background-color: rgba(var(--bs-warning-rgb), 0.1);
-  border-color: rgba(var(--bs-warning-rgb), 0.3);
-}
-.bg-vb-danger {
-  color: var(--bs-danger);
-  background-color: rgba(var(--bs-danger-rgb), 0.1);
-  border-color: rgba(var(--bs-danger-rgb), 0.3);
-}
 
 /* =========================
    CARD BASE FIX
@@ -112,29 +89,19 @@ $info: #6E9FCF !default;
 /* =========================
    VALUE BOXES
 ========================= */
-.bslib-value-box .value-box-area {
-  font-size: 0.9rem;
-  font-weight: 500;
+
+
+.quarto-dashboard .bslib-value-box .value-box-value {
+  font-weight: bold;
 }
 
-.bslib-value-box .value-box-title {
-  font-size: 0.72rem !important;
-  font-weight: 700 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.07em !important;
-  opacity: 0.9 !important;
-  margin-bottom: 0.2rem !important;
-  line-height: 1.3 !important;
+@include media-breakpoint-down(lg) {
+  .bslib-value-box .value-box-area {
+    padding: 0.5rem 0.5rem;
+    font-size: .7rem;
+    text-align: center;
+  }
 }
-
-.bslib-value-box .value-box-value {
-  font-size: 3rem !important;
-  font-weight: 800 !important;
-  line-height: 1.1 !important;
-  letter-spacing: -0.01em !important;
-}
-
-
 
 
 .bg-vb-success {
