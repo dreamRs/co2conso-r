@@ -1,9 +1,4 @@
-library(httr2)
-library(magrittr) 
-library(lubridate)
-library(rlang)
-library(data.table)
-library(arrow)
+
 
 make_request <- function(url,
                          ...,
@@ -66,39 +61,42 @@ charger_donnees <- function(proxy = FALSE){
   
     date_max <- max(donnees_cache$date_heure_utc)
     diff <- difftime(now(tzone = "UTC"), date_max,units = "hours") 
-    if (diff >0) {
+    if (diff > 0) {
       nouvelle_donnees <- download_dataset(
         proxy = proxy,
         server = "https://odre.opendatasoft.com",
         dataset = "part-enr-intensite-ges-conso-tr",
         where = paste0("date_heure_utc >= '", format(date_max, "%Y-%m-%dT%H:%M:%S"), "'")
-      )%>%mutate(date_cet = as.Date(date_cet),
-                 heure_cet = as.character(heure_cet))
+      ) %>%
+        mutate(
+          date_cet = as.Date(date_cet),
+          heure_cet = as.character(heure_cet)
+        )
       
       donnees <- bind_rows(
         donnees_cache,
-        nouvelle_donnees) %>% arrange(date_heure_utc)%>%
+        nouvelle_donnees) %>% arrange(date_heure_utc) %>%
         filter(!is.na(intensite_emissions_conso)) %>%
         distinct(date_heure_utc, .keep_all = TRUE)
       
       write_parquet(donnees, "inputs/donnees.parquet")
       return(donnees)
-        }
-    else {
+    } else {
       return(donnees_cache)
     }
   
-  }
-  else {
+  } else {
     donnees <- download_dataset(
     proxy = proxy,
     server = "https://odre.opendatasoft.com",
     dataset = "part-enr-intensite-ges-conso-tr")%>%
-      mutate(date_cet = as.Date(date_cet),
-             heure_cet = as.character(heure_cet))
+      mutate(
+        date_cet = as.Date(date_cet),
+        heure_cet = as.character(heure_cet)
+      )
     
     write_parquet(donnees, "inputs/donnees.parquet")
     return(donnees) 
-    }
+  }
 }
 

@@ -19,10 +19,11 @@ library(magrittr)
 library(rlang)
 library(data.table)
 library(arrow)
+library(httr2)
 
 
 source("R/graphiques.R")
-source("scripts/recuperation_donnees.R")
+source("R/data.R")
 
 donnees <- charger_donnees()
 
@@ -44,27 +45,27 @@ mois_titre <- mois_actuel(donnees)
 ```
 
 # Intensité CO₂
-## Row {height="25%"}
+## Row {height="15%"}
 
-::: {.valuebox icon="lightning-charge-fill" color="#4FAF8F"}
-CO₂ temps réel (gCO2/kWh)
+::: {.valuebox icon="lightning-charge-fill" color="#3E6B4F4D"}
+CO₂ temps réel (gCO₂éq/kWh)
 
 `r co2_now`
 :::
 
-::: {.valuebox icon="clock-history" color="#57B394"}
-Moyenne 24h (gCO2/kWh)
+::: {.valuebox icon="clock-history" color="#3E6B4F4D"}
+Moyenne 24h (gCO₂éq/kWh)
 
 `r co2_24h `
 :::
 
-::: {.valuebox icon="bar-chart-fill" color="#63BA9A"}
-Min — Max 30j (gCO2/kWh)
+::: {.valuebox icon="bar-chart-fill" color="#3E6B4F4D"}
+Min — Max 30j (gCO₂éq/kWh)
 
 `r paste0(co2_min30, "-", co2_max30)`
 :::
 
-::: {.valuebox icon="wind" color="#6E9FCF"}
+::: {.valuebox icon="wind" color="#6E9FCF4D"}
 Part ENR temps réel
 
 `r paste0(enr_now, "%")`
