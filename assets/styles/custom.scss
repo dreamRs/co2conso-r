@@ -90,11 +90,15 @@ $info: #6E9FCF !default;
    VALUE BOXES
 ========================= */
 
-
 .quarto-dashboard .bslib-value-box .value-box-value {
   font-weight: bold;
 }
-
+.bslib-value-box .value-box-title {
+   display: none;
+}
+.bslib-value-box .value-box-area {
+   padding: 1rem 1rem;
+}
 @include media-breakpoint-down(lg) {
   .bslib-value-box .value-box-area {
     padding: 0.5rem 0.5rem;
