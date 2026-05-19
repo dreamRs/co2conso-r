@@ -1,3 +1,5 @@
+name: Quarto Publish
+
 on:
   workflow_dispatch:
   push:
@@ -5,13 +7,12 @@ on:
   schedule:
     - cron: "0 * * * *"
 
-name: Quarto Publish
-
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -28,6 +29,21 @@ jobs:
         uses: r-lib/actions/setup-renv@v2
         with:
           cache-version: 1
+
+      - name: Fetch and save data
+        run: |
+          Rscript -e "
+            source('R/data.R')
+            charger_donnees()
+          "
+
+      - name: Commit updated parquet
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add inputs/donnees.parquet
+          git diff --staged --quiet || git commit -m "chore: update donnees.parquet [skip ci]"
+          git push
 
       - name: Render and Publish
         uses: quarto-dev/quarto-actions/publish@v2

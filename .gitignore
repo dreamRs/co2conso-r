@@ -12,3 +12,4 @@
 /.quarto/
 *_cache/
 .positai
+/_freeze/
