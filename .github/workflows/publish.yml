@@ -33,6 +33,12 @@ jobs:
       - name: Fetch and save data
         run: |
           Rscript -e "
+            library(httr2)
+            library(data.table)
+            library(arrow)
+            library(dplyr)
+            library(lubridate)
+            library(rlang)
             source('R/data.R')
             charger_donnees()
           "
