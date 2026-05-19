@@ -4,8 +4,6 @@ on:
   workflow_dispatch:
   push:
     branches: main
-  schedule:
-    - cron: "0 * * * *"
 
 jobs:
   build-deploy:
@@ -26,46 +24,14 @@ jobs:
         with:
           r-version: '4.4.3'
 
-      - name: Install R Dependencies
+      - name: Install R dependencies
         uses: r-lib/actions/setup-renv@v2
         with:
           cache-version: 1
 
-      - name: Fetch and save data
-        run: |
-          Rscript -e "
-            library(httr2)
-            library(data.table)
-            library(arrow)
-            library(dplyr)
-            library(lubridate)
-            library(rlang)
-
-            source('R/data.R')
-            charger_donnees()
-          "
-
-      - name: Commit updated parquet
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-
-          git pull --rebase origin main
-
-          git add inputs/donnees.parquet
-
-          git diff --staged --quiet || git commit -m "chore: update donnees.parquet [skip ci]"
-
-          git push
-
-      - name: Sync repository after parquet update
-        run: |
-          git pull origin main
-
-      - name: Render and Publish
+      - name: Render site
         uses: quarto-dev/quarto-actions/publish@v2
         with:
           target: gh-pages
-          path: index.qmd
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
