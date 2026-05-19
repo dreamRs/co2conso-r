@@ -48,9 +48,12 @@ co2_max30 <- max(donnees[date_heure_cet  >= now_cet - days(30),  intensite_emiss
 enr_now   <- donnees[date_heure_cet == now_cet, part_enr_conso]
 
 mois_titre <- mois_actuel(donnees)
+
+derniere_maj <- format(now_cet, "%d/%m/%Y à %Hh ")
 ```
 
 # Intensité CO₂
+
 ## Row {height="17.5%"}
 
 ::: {.valuebox icon="lightning-charge-fill" color="vb-primary"}
@@ -103,6 +106,8 @@ graphique_periodes(donnees, "1an")
 box_mois(donnees)
 ```
 
+
+**Dernière mise à jour : `r derniere_maj`**
 
 # À propos
 
