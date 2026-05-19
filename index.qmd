@@ -113,6 +113,19 @@ box_mois(donnees)
 
 ## Row
 
+### Column
+
+::: card
+::: card-header
+**Auteur**
+:::
+::: card-body
+Dashboard développé par **Othman Beqqal**
+
+[<i class="bi bi-github"></i> Github](https://github.com/Othman-Beqqal)
+:::
+:::
+
 ::: card
 ::: card-header
 **Repo Github**
@@ -120,9 +133,11 @@ box_mois(donnees)
 ::: card-body
 Le code source du dashboard est disponible ici :
 
-[🔗 Voir le repo](https://github.com/dreamRs/co2conso-r)
+[<i class="bi bi-github"></i> Voir le repo](https://github.com/dreamRs/co2conso-r)
 :::
 :::
+
+### Column 
 
 ::: card
 ::: card-header
@@ -136,3 +151,4 @@ actualisées toutes les **heures** par RTE :
 [🔗 Accéder au dataset](https://odre.opendatasoft.com/explore/dataset/part-enr-intensite-ges-conso-tr)
 :::
 :::
+
