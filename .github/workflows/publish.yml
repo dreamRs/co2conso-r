@@ -29,7 +29,21 @@ jobs:
         with:
           cache-version: 1
 
-      - name: Render site
+      - name: Fetch data
+        run: |
+          Rscript -e "
+            library(httr2)
+            library(data.table)
+            library(arrow)
+            library(dplyr)
+            library(lubridate)
+            library(rlang)
+
+            source('R/data.R')
+            charger_donnees()
+          "
+
+      - name: Render & Publish
         uses: quarto-dev/quarto-actions/publish@v2
         with:
           target: gh-pages

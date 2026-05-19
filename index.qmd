@@ -5,6 +5,9 @@ format:
     theme:
       - cosmo
       - assets/styles/custom.scss
+project:
+  type: website
+  
 execute:
   echo: false
   freeze: false
