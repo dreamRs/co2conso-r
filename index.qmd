@@ -5,6 +5,7 @@ format:
     theme:
       - cosmo
       - assets/styles/custom.scss
+    embed-resources: true
     include-in-header:
       text: |
         <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
