@@ -26,7 +26,7 @@ library(rlang)
 library(data.table)
 library(arrow)
 library(httr2)
-
+library(ggplot2)
 
 source("R/graphiques.R")
 source("R/data.R")
@@ -47,7 +47,7 @@ co2_max30 <- max(donnees[date_heure_cet  >= now_cet - days(30),  intensite_emiss
 
 enr_now   <- donnees[date_heure_cet == now_cet, part_enr_conso]
 
-mois_titre <- mois_actuel(donnees)
+mois_titre <- nom_mois(donnees)
 
 derniere_maj <- format(now_cet, "%d/%m/%Y à %Hh ")
 ```
@@ -101,13 +101,33 @@ graphique_periodes(donnees, "1an")
 
 ### Column {width="35%"}
 
+```{r histogramme}
+#| title: "Distribution de l'intensité carbone"
+histogramme(donnees)
+```
+
+
+**Dernière mise à jour : `r derniere_maj`**
+
+
+# Statistiques
+## Row
+### Column
 ```{r boxplot}
 #| title: !expr paste("Statistiques de l'intensité en CO₂ pour le mois de :", mois_titre)
 box_mois(donnees)
 ```
 
+```{r heatmap mois}
+#| title: "Intensité carbone par mois et année"
+heatmap_annee(donnees)
+```
 
-**Dernière mise à jour : `r derniere_maj`**
+### Column
+```{r heatmap}
+#| title: !expr paste("Intensité carbone -", format(Sys.Date(), "%Y"))
+heatmap_jour(donnees)
+```
 
 # À propos
 
@@ -151,4 +171,3 @@ actualisées toutes les **heures** par RTE :
 [🔗 Accéder au dataset](https://odre.opendatasoft.com/explore/dataset/part-enr-intensite-ges-conso-tr)
 :::
 :::
-

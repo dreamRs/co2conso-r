@@ -4,10 +4,6 @@ output: html_document
 date: "2026-05-15"
 ---
 
-```{r, include=FALSE,  results='hide'}
-Sys.setlocale("LC_TIME", "fr_FR.UTF-8")
-```
-
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 setwd("..")
 
