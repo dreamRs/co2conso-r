@@ -116,7 +116,7 @@ box_mois(donnees,"mensuel")
 
 ### Column
 ```{r boxplot année}
-#| title: "Statistiques annuelles de lintensité CO₂"
+#| title: "Statistiques annuelles de l'intensité CO₂"
 box_mois(donnees,"annuel")
 ```
 
@@ -132,10 +132,6 @@ heatmap_annee(donnees)
 histogramme(donnees)
 ```
 
-```{r barchart}
-#| title: "Intensité en CO₂ moyenne par année"
-barchart(donnees)
-```
 
 # À propos
 

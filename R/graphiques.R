@@ -213,19 +213,3 @@ evolution_annuelle <- function(donnees){
     ax_dataLabels(enabled = FALSE,
                   formatter = htmlwidgets::JS("function(val) { return val.toFixed(2) }"))
 }
-
-barchart <- function(donnees){
-  donnees <- donnees %>%
-    mutate(annee = year(date_heure_cet))%>%
-    group_by(annee)%>%
-    summarise(moyenne = mean(intensite_emissions_conso, na.rm = TRUE))
-    
-  apex(data = donnees , type = "column", mapping = aes(x = annee , y = moyenne))%>%
-  ax_colors("#1B5E20")%>%
-  ax_xaxis(title = list(text = "Année"))%>%
-  ax_yaxis(title = list(text ="Intensité des émissions (en gCO₂éq/kWh)"),
-           labels =list(formatter = htmlwidgets ::JS("function(val) { return val.toFixed(0)}")))%>%
-  ax_tooltip(
-      y = list(formatter = htmlwidgets::JS("function(val) { return val.toFixed(2) + ' gCO₂éq/kWh' }"))
-    )
-}
