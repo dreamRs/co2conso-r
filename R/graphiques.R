@@ -17,40 +17,30 @@ num_vers_mois <- function(numero) {
   mois_fr[numero]
 }
 
-box_mois <- function(donnees, mode = c("mensuel", "annee")){
+box_mois <- function(donnees, mode = c("mensuel", "annuel")){
   mode <- match.arg(mode)
   
   mois_ac <- lubridate::month(max(donnees$date_cet))
-  annee_ac <- year(max(donnees$date_cet))
-  
-  mois_titre <- num_vers_mois(mois_ac)
   
   data_plot <- donnees %>%
     mutate(
       num_mois = lubridate::month(date_cet),
-      annee = year(date_cet)
-    )
-  data_plot <- switch (mode, 
-                     "mensuel" = data_plot %>% filter(num_mois == mois_ac),
-                     "annee"= data_plot %>% filter(annee== annee_ac, num_mois <= mois_ac))
-  data_plot <- data_plot %>%
-    mutate(mois = factor(num_vers_mois(num_mois), levels = num_vers_mois(1:mois_ac)))
+      annee = year(date_cet))
   
-  x_var <- if (mode=="mensuel") "annee" else "mois"
-  titre <- if (mode == "mensuel") paste("Comparaison du mois de", mois_titre , "par année") 
-          else paste("Statistiques de l'intensité en CO₂ pour l'année",annee_ac)
-  x_axis <- if (mode=="mensuel") "Annee" else "Mois"
+  data_plot <- switch (mode, 
+                     "mensuel" = data_plot %>% filter(num_mois == mois_ac), 
+                     "annuel" = data_plot)
   
   apex(
     data = data_plot,
     type = "boxplot", 
-    mapping = aes(x = .data[[x_var]], y = intensite_emissions_conso)
+    mapping = aes(x = annee, y = intensite_emissions_conso)
   ) %>%
     ax_plotOptions(
       boxPlot = boxplot_opts(color.upper = "#1B5E20", color.lower = "#1B5E20")
     ) %>%
     ax_xaxis(
-      title = list(text = x_axis)
+      title = list(text = "Année")
     ) %>%
     ax_yaxis(
       title = list(text = "Intensité des émissions (en gCO₂éq/kWh)")
@@ -222,4 +212,20 @@ evolution_annuelle <- function(donnees){
     ) %>%
     ax_dataLabels(enabled = FALSE,
                   formatter = htmlwidgets::JS("function(val) { return val.toFixed(2) }"))
+}
+
+barchart <- function(donnees){
+  donnees <- donnees %>%
+    mutate(annee = year(date_heure_cet))%>%
+    group_by(annee)%>%
+    summarise(moyenne = mean(intensite_emissions_conso, na.rm = TRUE))
+    
+  apex(data = donnees , type = "column", mapping = aes(x = annee , y = moyenne))%>%
+  ax_colors("#1B5E20")%>%
+  ax_xaxis(title = list(text = "Année"))%>%
+  ax_yaxis(title = list(text ="Intensité des émissions (en gCO₂éq/kWh)"),
+           labels =list(formatter = htmlwidgets ::JS("function(val) { return val.toFixed(0)}")))%>%
+  ax_tooltip(
+      y = list(formatter = htmlwidgets::JS("function(val) { return val.toFixed(2) + ' gCO₂éq/kWh' }"))
+    )
 }

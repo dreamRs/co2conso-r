@@ -26,7 +26,7 @@ library(rlang)
 library(data.table)
 library(arrow)
 library(httr2)
-library(ggplot2)
+
 
 source("R/graphiques.R")
 source("R/data.R")
@@ -101,9 +101,9 @@ graphique_periodes(donnees, "1an")
 
 ### Column {width="35%"}
 
-```{r histogramme}
-#| title: "Distribution de l'intensité carbone"
-histogramme(donnees)
+```{r boxplot mois}
+#| title: !expr paste("Statistiques de l'intensité en CO₂ pour le mois de :", mois_titre)
+box_mois(donnees,"mensuel")
 ```
 
 
@@ -111,22 +111,30 @@ histogramme(donnees)
 
 
 # Statistiques
+
 ## Row
+
 ### Column
-```{r boxplot}
-#| title: !expr paste("Statistiques de l'intensité en CO₂ pour le mois de :", mois_titre)
-box_mois(donnees)
+```{r boxplot année}
+#| title: "Statistiques annuelles de lintensité CO₂"
+box_mois(donnees,"annuel")
 ```
 
 ```{r heatmap mois}
-#| title: "Intensité carbone par mois et année"
+#| title: "Intensité en CO₂ moyenne par mois et année"
 heatmap_annee(donnees)
 ```
 
 ### Column
-```{r heatmap}
-#| title: !expr paste("Intensité carbone -", format(Sys.Date(), "%Y"))
-heatmap_jour(donnees)
+
+```{r histogramme}
+#| title: "Distribution de l'intensité en CO₂"
+histogramme(donnees)
+```
+
+```{r barchart}
+#| title: "Intensité en CO₂ moyenne par année"
+barchart(donnees)
 ```
 
 # À propos
