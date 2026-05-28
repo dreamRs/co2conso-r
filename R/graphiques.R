@@ -1,26 +1,42 @@
 
 
-mois_actuel <- function(donnees) {
-  donnees %>%
+nom_mois <- function(donnees) {
+  mois_fr <- c("Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+               "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre")
+  numero_mois <- donnees %>%
     filter(date_heure_utc <= lubridate::now(tzone = "UTC")) %>%
-    summarise(mois = lubridate::month(max(date_cet), label = TRUE, abbr = FALSE)) %>%
+    summarise(mois = lubridate::month(max(date_cet))) %>%
     pull(mois)
+  
+    mois_fr[numero_mois]
 }
 
-box_mois <- function(donnees) {
-  mois_ac <- mois_actuel(donnees)
+num_vers_mois <- function(numero) {
+  mois_fr <- c("Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+               "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre")
+  mois_fr[numero]
+}
+
+box_mois <- function(donnees, mode = c("mensuel", "annuel")){
+  mode <- match.arg(mode)
+  
+  mois_ac <- lubridate::month(max(donnees$date_cet))
+  
   data_plot <- donnees %>%
     mutate(
-      nom_mois = lubridate::month(date_cet, label = TRUE, abbr = FALSE),
-      annee = year(date_cet)
-    ) %>%
-    filter(nom_mois == mois_ac)
+      num_mois = lubridate::month(date_cet),
+      annee = year(date_cet))
+  
+  data_plot <- switch (mode, 
+                     "mensuel" = data_plot %>% filter(num_mois == mois_ac), 
+                     "annuel" = data_plot)
   
   apex(
     data = data_plot,
     type = "boxplot", 
     mapping = aes(x = annee, y = intensite_emissions_conso)
   ) %>%
+    ax_chart(defaultLocale = "fr") %>%
     ax_plotOptions(
       boxPlot = boxplot_opts(color.upper = "#1B5E20", color.lower = "#1B5E20")
     ) %>%
@@ -28,7 +44,7 @@ box_mois <- function(donnees) {
       title = list(text = "Année")
     ) %>%
     ax_yaxis(
-      title = list(text = "Intensité carbone (gCO₂éq/kWh)")
+      title = list(text = "Intensité des émissions (en gCO₂éq/kWh)")
     )
 }
 
@@ -59,6 +75,10 @@ graphique_periodes <- function(donnees, periode = c("24h", "7j", "30j", "1an")) 
     type = "line",
     serie_name = "Intensité consommation"
   ) %>%
+    add_hline(value = mean(data_plot$intensite_emissions_conso,na.rm = TRUE), dash = 5, 
+              label = label(text = paste("Moyenne :",round(mean(data_plot$intensite_emissions_conso,na.rm = TRUE),1),"gCO₂éq/kWh"),
+              position = "left",
+              offsetX = 120))%>%
     ax_chart(
       defaultLocale = "fr",
       zoom = list(enabled = TRUE),
@@ -72,7 +92,7 @@ graphique_periodes <- function(donnees, periode = c("24h", "7j", "30j", "1an")) 
       labels = list(datetimeUTC = FALSE)
     ) %>%
     ax_yaxis(
-      title = list(text = "gCO₂éq/kWh"), 
+      title = list(text = "Intensité des émissions (en gCO₂éq/kWh)"), 
       decimalsInFloat = 2, 
       min = 0
     ) %>%
@@ -84,7 +104,7 @@ graphique_periodes <- function(donnees, periode = c("24h", "7j", "30j", "1an")) 
 
 heatmap_annee <- function(donnees){
   donnees <- donnees %>%
-    mutate(mois= lubridate ::month(date_heure_cet, label = TRUE, abbr= TRUE),
+    mutate(mois = factor(num_vers_mois(lubridate::month(date_heure_cet)), levels = num_vers_mois(1:12)),
            annee = year(date_heure_cet))%>%
     group_by(mois,annee)%>%
     summarise(moyenne= mean(intensite_emissions_conso, na.rm = TRUE), .groups = "drop")
@@ -94,17 +114,18 @@ heatmap_annee <- function(donnees){
     ax_tooltip(
       y = list(formatter = htmlwidgets::JS("function(val) { return val.toFixed(1) + ' gCO₂/kWh' }"))
     ) %>%
-    ax_title(text = "Intensité carbone par mois et année") %>%
+    ax_chart(defaultLocale = "fr")%>%
+    #ax_title(text = "Intensité carbone par mois et année") %>%
     ax_xaxis(title = list(text = "Année")) %>%
     ax_yaxis(title = list(text = "Mois")) %>%
     ax_dataLabels(enabled = FALSE)
 }
 
 heatmap_jour <- function(donnees){
-  annee_ac <- year(max(donnees$date_heure_utc, na.rm = TRUE))
+  annee_ac <- year(max(donnees$date_heure_cet, na.rm = TRUE))
   
   donnees <- donnees %>%
-    mutate(mois= lubridate ::month(date_heure_cet, label = TRUE, abbr= TRUE),
+    mutate(mois = factor(num_vers_mois(lubridate::month(date_heure_cet)), levels = num_vers_mois(1:12)),
            jour = day(date_heure_cet),
            annee = year(date_heure_cet))%>%
     filter(annee == annee_ac)%>%
@@ -116,28 +137,52 @@ heatmap_jour <- function(donnees){
     ax_tooltip(
       y = list(formatter = htmlwidgets::JS("function(val) { return val.toFixed(1) + ' gCO₂/kWh' }"))
     ) %>%
-    ax_title(text = paste("Intensité carbone -", format(Sys.Date(), "%Y"))) %>%
+    ax_chart(defaultLocale = "fr")%>%
+    #ax_title(text = paste("Intensité carbone -", format(Sys.Date(), "%Y"))) %>%
     ax_xaxis(title = list(text = "Mois")) %>%
     ax_yaxis(title = list(text = "Jour")) %>%
     ax_dataLabels(enabled = FALSE) }
     
     
-histogramme <- function(donnees){
+histogramme1 <- function(donnees){
   ggplot(donnees, aes(intensite_emissions_conso)) +
   geom_histogram(fill = "#81C784", color = "white")+
     labs(
-      title= "Distribution de l'intensité carbone",
       x = "Intensité carbone (gCO2éq/kWh)",
       y = "Nombre d'heures"
     )+
     theme_minimal() 
   }
   
+histogramme <- function(donnees){
+  h <- hist(donnees$intensite_emissions_conso, plot = FALSE, breaks = 30)
+  df <- data.frame(
+    x = h$mids,
+    y = h$counts
+  )
   
+  apex(
+    data = df,
+    aes(x = x, y = y),
+    type = "column"
+  ) %>%
+    ax_chart(defaultLocale = "fr")%>%
+    ax_xaxis(title = list(text = "Intensité carbone (gCO₂éq/kWh)")) %>%
+    ax_yaxis(title = list(text = "Nombre d'heures")) %>%
+    ax_colors("#1B5E20") %>%
+    ax_plotOptions(bar = bar_opts(columnWidth = "100%")) %>%
+    ax_dataLabels(enabled = FALSE) %>%
+    ax_tooltip(y = list(title = list(formatter = JS("function() { return 'Nombre d\\'heures :' }"))))
+}
+
+format_date_fr <- function(date) {
+  paste(format(date, "%d"), num_vers_mois(lubridate::month(date)), format(date, "%Y"))
+}
+
+
 histo_derniere <- function(donnees){
   
-  now_cet <- max(donnees$date_heure_utc, na.rm = TRUE) %>%
-    lubridate::with_tz("Europe/Paris")
+  now_cet <- max(donnees$date_heure_cet, na.rm = TRUE)
   
   data_plot <- donnees %>%
     filter(date_heure_cet >= now_cet - lubridate::years(1))
@@ -145,12 +190,14 @@ histo_derniere <- function(donnees){
   ggplot(data_plot, aes(intensite_emissions_conso)) +
     geom_histogram(fill = "#81C784", color = "white")+
     labs(
-      title = paste("Distribution", format(now_cet - lubridate::years(1), "%d %B %Y"), "-", format(now_cet, "%d %B %Y")),
+      title = paste("Distribution", format_date_fr(now_cet - lubridate::years(1)),"-", format_date_fr(now_cet)),
       x = "Intensité carbone (gCO2éq/kWh)",
       y = "Nombre d'heures"
     )+
     theme_minimal()
 }   
+
+
 
 evolution_annuelle <- function(donnees){
   data_plot <- donnees %>%
@@ -160,6 +207,7 @@ evolution_annuelle <- function(donnees){
     mutate(annee = as.character(annee))
   
   apex(data = data_plot, type = "bar", mapping = aes(x = annee, y = moyenne)) %>%
+    ax_chart(defaultLocale = "fr")%>%
     ax_colors("#1B5E20") %>%
     ax_title(text = "Évolution de l'intensité carbone moyenne par année") %>%
     ax_xaxis(title = list(text = "Année")) %>%

@@ -66,6 +66,7 @@ $info: #6E9FCF !default;
   align-items: center !important;
   justify-content: flex-end !important;
 }
+
 .bslib-navs-card-title::before {
   content: "Intensité horaire des GES de la consommation";
   font-weight: 700;
@@ -74,6 +75,7 @@ $info: #6E9FCF !default;
   flex: 1 1 auto;
   margin-right: 1rem;
 }
+
 .bslib-navs-card-title .nav-tabs,
 .bslib-navs-card-title .card-header-tabs {
   flex-shrink: 0 !important;
