@@ -36,6 +36,7 @@ box_mois <- function(donnees, mode = c("mensuel", "annuel")){
     type = "boxplot", 
     mapping = aes(x = annee, y = intensite_emissions_conso)
   ) %>%
+    ax_chart(defaultLocale = "fr") %>%
     ax_plotOptions(
       boxPlot = boxplot_opts(color.upper = "#1B5E20", color.lower = "#1B5E20")
     ) %>%
@@ -113,6 +114,7 @@ heatmap_annee <- function(donnees){
     ax_tooltip(
       y = list(formatter = htmlwidgets::JS("function(val) { return val.toFixed(1) + ' gCO₂/kWh' }"))
     ) %>%
+    ax_chart(defaultLocale = "fr")%>%
     #ax_title(text = "Intensité carbone par mois et année") %>%
     ax_xaxis(title = list(text = "Année")) %>%
     ax_yaxis(title = list(text = "Mois")) %>%
@@ -135,6 +137,7 @@ heatmap_jour <- function(donnees){
     ax_tooltip(
       y = list(formatter = htmlwidgets::JS("function(val) { return val.toFixed(1) + ' gCO₂/kWh' }"))
     ) %>%
+    ax_chart(defaultLocale = "fr")%>%
     #ax_title(text = paste("Intensité carbone -", format(Sys.Date(), "%Y"))) %>%
     ax_xaxis(title = list(text = "Mois")) %>%
     ax_yaxis(title = list(text = "Jour")) %>%
@@ -163,6 +166,7 @@ histogramme <- function(donnees){
     aes(x = x, y = y),
     type = "column"
   ) %>%
+    ax_chart(defaultLocale = "fr")%>%
     ax_xaxis(title = list(text = "Intensité carbone (gCO₂éq/kWh)")) %>%
     ax_yaxis(title = list(text = "Nombre d'heures")) %>%
     ax_colors("#1B5E20") %>%
@@ -203,6 +207,7 @@ evolution_annuelle <- function(donnees){
     mutate(annee = as.character(annee))
   
   apex(data = data_plot, type = "bar", mapping = aes(x = annee, y = moyenne)) %>%
+    ax_chart(defaultLocale = "fr")%>%
     ax_colors("#1B5E20") %>%
     ax_title(text = "Évolution de l'intensité carbone moyenne par année") %>%
     ax_xaxis(title = list(text = "Année")) %>%
