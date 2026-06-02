@@ -155,24 +155,30 @@ histogramme1 <- function(donnees){
   }
   
 histogramme <- function(donnees){
-  h <- hist(donnees$intensite_emissions_conso, plot = FALSE, breaks = 30)
-  df <- data.frame(
-    x = h$mids,
-    y = h$counts
-  )
+  df <- donnees %>%
+    count(intensite_emissions_conso, name = "n")%>%
+    mutate(pct = n/sum(n)  *100 )
   
   apex(
     data = df,
-    aes(x = x, y = y),
-    type = "column"
+    aes(x = intensite_emissions_conso, y = pct),
+    type = "area"
   ) %>%
     ax_chart(defaultLocale = "fr")%>%
     ax_xaxis(title = list(text = "Intensité carbone (gCO₂éq/kWh)")) %>%
-    ax_yaxis(title = list(text = "Nombre d'heures")) %>%
+    ax_yaxis(
+      title = list(text = "% des heures"),
+      labels = list(formatter = JS("function(val){ return val.toFixed(0) + '%'; }"))) %>%
     ax_colors("#1B5E20") %>%
-    ax_plotOptions(bar = bar_opts(columnWidth = "100%")) %>%
     ax_dataLabels(enabled = FALSE) %>%
-    ax_tooltip(y = list(title = list(formatter = JS("function() { return 'Nombre d\\'heures :' }"))))
+    ax_stroke(curve = "stepline")%>%
+    ax_tooltip(y = list(
+      title = list(formatter = JS("function() { return 'Part :' }")),
+      formatter = JS("function(val, opts) {
+    var cumul = opts.series[0].slice(0, opts.dataPointIndex + 1).reduce((a,b) => a+b, 0).toFixed(1);
+    return val.toFixed(1) + '% | ' + cumul + '% des heures en dessous';
+  }")
+    ))
 }
 
 format_date_fr <- function(date) {

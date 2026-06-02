@@ -25,7 +25,7 @@ donnees <- donnees %>%
 
 heatmap_annee(donnees)
 heatmap_jour(donnees)
-histogramme(donnees)
+histogramme1(donnees)
 histo_derniere(donnees)
 evolution_annuelle(donnees)
 ```
